@@ -3,6 +3,9 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { injectGlobal } from "styled-components";
+
+import { PersistGate } from "redux-persist/integration/react";
+
 import storeConfig from "./store";
 
 // Import Master Layout
@@ -14,7 +17,7 @@ import Home from "./pages/home";
 import registerServiceWorker from "./registerServiceWorker";
 
 // Create our store
-const store = storeConfig();
+const { persistor, store } = storeConfig();
 
 // Inject any global styling rules
 injectGlobal`
@@ -29,9 +32,11 @@ injectGlobal`
 const Root = ({ store }) => (
   <Master>
     <Provider store={store}>
-      <Router>
-        <Route exact path="/" component={Home} />
-      </Router>
+      <PersistGate loading={null} persistor={persistor}>
+        <Router>
+          <Route exact path="/" component={Home} />
+        </Router>
+      </PersistGate>
     </Provider>
   </Master>
 );

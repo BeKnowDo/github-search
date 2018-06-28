@@ -1,10 +1,20 @@
 import fetch from "cross-fetch";
 import { actionTypes } from "../action-types";
+import {
+  url,
+  stars,
+  license,
+  forked,
+  keywords,
+  result_page
+} from "../../store/query/query-actions";
 import { endpoints } from "../../endpoints";
 
-export function getResults(query, dispatch) {
-  query = query || "";
-  const fetchURL = endpoints.search + query;
+export function getResults(searchParameters, dispatch) {
+  searchParameters = searchParameters || {};
+
+  const perPage = "&per_page=10";
+  const fetchURL = endpoints.search + searchParameters.url + perPage;
 
   // show loading indicator
   dispatch({
@@ -12,26 +22,24 @@ export function getResults(query, dispatch) {
     loader: true
   });
 
-  // clear previous results before fetching
-  dispatch({
-    type: actionTypes.GET_RESULTS,
-    results: null
-  });
-
   fetch(fetchURL)
     .then(response => response.json())
     .then(data => {
-      const results = data.items.length > 0 ? data.items : data;
-
       dispatch({
-        type: actionTypes.GET_RESULTS,
-        results
+        type: actionTypes.RESULTS,
+        results: data
       });
 
       dispatch({
         type: actionTypes.LOADER,
         loader: false
       });
+
+      keywords({ keywords: searchParameters.keywords }, dispatch);
+      stars({ stars: searchParameters.stars }, dispatch);
+      license({ license: searchParameters.license }, dispatch);
+      forked({ forked: searchParameters.forked }, dispatch);
+      url({ url: searchParameters.url }, dispatch);
     })
     .catch(error => {
       console.log(error);

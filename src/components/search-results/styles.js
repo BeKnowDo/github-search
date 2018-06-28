@@ -23,14 +23,12 @@ export const OwnerAvatar = styled.div`
 
 export const ResultItemSc = styled.li`
   border: ${borders.grey};
-  border-right: 0;
   list-style-type: none;
   padding: 0 10px;
   margin: 0 0 10px;
   > div {
     > div {
       text-align: center;
-      border-right: ${borders.grey};
       &:first-child {
         text-align: left;
       }

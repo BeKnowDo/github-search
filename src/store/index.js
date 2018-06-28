@@ -1,19 +1,25 @@
-import { combineReducers, createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware } from "redux";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage"; // defaults to localStorage for web and AsyncStorage for react-native
+
 import thunk from "redux-thunk";
-import loader from "./loader/loader-reducer";
-import results from "./results/results-reducer";
-import query from "./query/query-reducer";
+import reducers from "./combine-reducers";
+
+const persistConfig = {
+  key: "bkd",
+  storage
+};
+
+const persistedReducer = persistReducer(persistConfig, reducers);
 
 export default () => {
   const store = createStore(
-    combineReducers({
-      loader,
-      results,
-      query
-    }),
+    persistedReducer,
     window.__REDUX_DEVTOOLS_EXTENSION__ &&
       window.__REDUX_DEVTOOLS_EXTENSION__(),
     applyMiddleware(thunk)
   );
-  return store;
+
+  let persistor = persistStore(store);
+  return { store, persistor };
 };

@@ -14,8 +14,8 @@ const theme = {
   flexboxgrid: {
     // Defaults
     gridSize: 12, // Cols
-    gutterWidth: 1, // rem
-    outerMargin: 2, // rem
+    gutterWidth: 0.5, // rem
+    outerMargin: 0.3, // rem
     mediaQuery: "only screen",
     container: {
       sm: 46, // rem

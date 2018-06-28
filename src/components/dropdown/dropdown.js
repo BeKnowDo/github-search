@@ -3,15 +3,38 @@ import { DropdownSC } from "./styles";
 
 class Dropdown extends PureComponent {
   render() {
+    const license = this.props.license;
+    const values = [
+      {
+        text: "Select license type",
+        value: ""
+      },
+      {
+        text: "MIT",
+        value: "MIT"
+      },
+      {
+        text: "ISC",
+        value: "ISC"
+      },
+      {
+        text: "Apache",
+        value: "Apache"
+      },
+      {
+        text: "GPL",
+        value: "GPL"
+      }
+    ];
     return (
-      <DropdownSC {...this.props}>
-        <option value="" defaultValue="selected">
-          Select license type
-        </option>
-        <option value="MIT">MIT</option>
-        <option value="ISC">ISC</option>
-        <option value="Apache">Apache</option>
-        <option value="GPL">GPL</option>
+      <DropdownSC {...this.props} value={license}>
+        {values.map(item => {
+          return (
+            <option key={item.value} value={item.value}>
+              {item.text}
+            </option>
+          );
+        })}
       </DropdownSC>
     );
   }

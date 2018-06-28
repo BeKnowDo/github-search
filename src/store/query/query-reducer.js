@@ -1,54 +1,61 @@
 import { actionTypes } from "../action-types";
 
 const defaultState = {
-  query: "",
+  url: "",
+  keywords: "",
   forked: false,
   license: "",
-  stars: ""
+  stars: "",
+  result_page: 1
 };
 
-const query = (state = defaultState, action) => {
+const url = (state = defaultState, action) => {
   switch (action.type) {
-    case actionTypes.QUERY:
+    case actionTypes.KEYWORDS:
       return {
         ...state,
-        query: action.query,
-        loader: true
+        keywords: action.keywords
       };
-    case actionTypes.QUERY_FORKED:
+
+    case actionTypes.URL:
       return {
         ...state,
-        forked: action.forked,
-        loader: true
+        url: action.url
       };
-    case actionTypes.QUERY_LICENSE:
+
+    case actionTypes.FORKED:
       return {
         ...state,
-        license: action.license,
-        loader: true
+        forked: action.forked
       };
-    case actionTypes.QUERY_STARS:
+    case actionTypes.LICENSE:
       return {
         ...state,
-        stars: action.stars,
-        loader: true
+        license: action.license
+      };
+    case actionTypes.STARS:
+      return {
+        ...state,
+        stars: action.stars
+      };
+    case actionTypes.PAGE:
+      return {
+        ...state,
+        result_page: action.result_page
       };
 
     case actionTypes.LOADER:
-      return { ...state, loader: true };
+      return {
+        ...state
+      };
 
     case actionTypes.RESET:
       return {
-        ...state,
-        loader: false,
-        query: "",
-        stars: "",
-        license: "",
-        forked: false
+        ...defaultState
       };
     default:
       return state;
   }
 };
 
-export default query;
+export default url;

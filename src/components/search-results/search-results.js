@@ -1,7 +1,16 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { Row, Col } from "react-styled-flexboxgrid";
-import { ResultItemSc, ForkedFlagSc, PargraphSc, OwnerAvatar } from "./styles";
+import Pagination from "../pagination";
+import NoResults from "../no-results";
+
+import {
+  ResultContainerSc,
+  ResultItemSc,
+  ForkedFlagSc,
+  PargraphSc
+  // OwnerAvatar
+} from "./styles";
 
 class SearchResults extends Component {
   ForkedFlag = () => {
@@ -72,24 +81,57 @@ class SearchResults extends Component {
   };
 
   buildList() {
-    const results = this.props.results;
-
+    const results = this.props.items;
     return results.map(result => {
       return this.resultItem(result);
     });
   }
 
   render() {
-    return <React.Fragment>{this.buildList()}</React.Fragment>;
+    const page = this.props.result_page || 1;
+    const total = this.props.total_count;
+    const results = this.props.items;
+
+    if (results) {
+      return (
+        <Fragment>
+          {results.length > 0 ? (
+            <Pagination
+              page={page}
+              previousPageResults={e => {
+                const targetPage = page - 1;
+                if (targetPage >= 0) {
+                  this.props.previousPageResults(e, targetPage, "");
+                }
+              }}
+              nextPageResults={e => {
+                const targetPage = page + 1;
+                if (page + 1 <= total) {
+                  this.props.nextPageResults(e, targetPage, "");
+                }
+              }}
+              total={total}
+            />
+          ) : (
+            undefined
+          )}
+          <ResultContainerSc>{this.buildList()}</ResultContainerSc>
+        </Fragment>
+      );
+    } else {
+      return (
+        <NoResults
+          data={results}
+          copy="Please enter your query and click the SEARCH button above - results will appear here."
+          no_results="No results. Please modify your search."
+        />
+      );
+    }
   }
 }
 
 SearchResults.propTypes = {
   results: PropTypes.array
-};
-
-SearchResults.defaultProps = {
-  results: []
 };
 
 export default SearchResults;

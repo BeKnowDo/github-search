@@ -1,29 +1,43 @@
 import { actionTypes } from "../action-types";
 
-export function query({ query = "" } = {}, dispatch) {
+export function url({ url = "" } = {}, dispatch) {
   dispatch({
-    type: actionTypes.QUERY,
-    query
+    type: actionTypes.URL,
+    url
+  });
+}
+
+export function keywords({ keywords = "" } = {}, dispatch) {
+  dispatch({
+    type: actionTypes.KEYWORDS,
+    keywords
   });
 }
 
 export function stars({ stars = "" } = {}, dispatch) {
   dispatch({
-    type: actionTypes.QUERY_STARS,
+    type: actionTypes.STARS,
     stars
   });
 }
 
 export function license({ license = "" } = {}, dispatch) {
   dispatch({
-    type: actionTypes.QUERY_LICENSE,
+    type: actionTypes.LICENSE,
     license
   });
 }
 
 export function forked({ forked = "" } = {}, dispatch) {
   dispatch({
-    type: actionTypes.QUERY_FORKED,
+    type: actionTypes.FORKED,
     forked
+  });
+}
+
+export function result_page({ result_page = 1 } = {}, dispatch) {
+  dispatch({
+    type: actionTypes.PAGE,
+    result_page
   });
 }

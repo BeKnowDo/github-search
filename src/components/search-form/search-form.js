@@ -7,43 +7,65 @@ import { Button } from "../button";
 import Input from "../input";
 import Dropdown from "../dropdown";
 import Checkbox from "../checkbox";
-import SearchResults from "../search-results";
-import NoResults from "../no-results";
 import Loader from "../loader";
 import Label from "../label";
 
 class SearchForm extends Component {
+  constructor(props) {
+    super(props);
+    // let's leverage component state to avoid unnecessary rerendering
+
+    this.defaultState = {
+      keywords: this.props.keywords || "",
+      url: "",
+      stars: this.props.stars || "",
+      license: this.props.license || "",
+      forked: this.props.forked || false
+    };
+    this.state = this.defaultState;
+  }
+
   render() {
-    const results = this.props.results || "";
-    const query = this.props.query || "";
-    const stars = this.props.stars || "";
-    const license = this.props.license || "";
-    const forked = this.props.forked || "";
+    const keywords = this.state.keywords || "";
+    const stars = this.state.stars || "";
+    const license = this.state.license || "";
+    const forked = this.state.forked;
+
+    let url = "";
+
+    if (keywords.length > 0) {
+      url = url + `${keywords}`;
+    }
+
+    if (stars.length > 0) {
+      url = url + ` stars:${stars}`;
+    }
+
+    if (license.length > 0) {
+      url = url + ` license:${license}`;
+    }
+
+    if (forked === true) {
+      url = url + ` fork:true`;
+    }
+
+    const searchParameters = {
+      keywords,
+      stars,
+      license,
+      forked,
+      url
+    };
 
     return (
       <Fragment>
         <FormSc
           onSubmit={e => {
             e.preventDefault();
-            let fetchURL = "";
-            if (query.length > 0) {
-              fetchURL = fetchURL + `${query}`;
-            }
 
-            if (stars.length > 0) {
-              fetchURL = fetchURL + ` stars:${stars}`;
-            }
-
-            if (license.length > 0) {
-              fetchURL = fetchURL + ` license:${license}`;
-            }
-
-            if (forked === true) {
-              fetchURL = fetchURL + ` fork:only`;
-            }
-
-            if (fetchURL.length > 0) {
-              this.props.handleSubmit(e, fetchURL);
+            // check if the user provided input
+            if (url.length > 0) {
+              this.props.handleSubmit(e, searchParameters);
             }
           }}
           compact="true"
@@ -54,8 +76,12 @@ class SearchForm extends Component {
               <Input
                 type="text"
                 placeholder="Search by keyword"
-                value={query || ""}
-                onChange={this.props.handleChange}
+                value={keywords || ""}
+                onChange={e => {
+                  this.setState({
+                    keywords: e.target.value
+                  });
+                }}
               />
             </Col>
 
@@ -65,18 +91,36 @@ class SearchForm extends Component {
                 type="text"
                 placeholder="Search by stars, i.e.: >=500"
                 value={stars || ""}
-                onChange={this.props.starQuery}
+                onChange={e => {
+                  this.setState({
+                    stars: e.target.value
+                  });
+                }}
               />
             </Col>
           </Row>
           <Row>
             <Col xs={12} sm={6} md={6} lg={6}>
               <Label text="License type" />
-              <Dropdown onChange={this.props.licenseQuery} />
+              <Dropdown
+                license={license}
+                onChange={e => {
+                  this.setState({
+                    license: e.target.value
+                  });
+                }}
+              />
             </Col>
 
             <Col xs={12} sm={6} md={6} lg={6}>
-              <Checkbox onChange={this.props.forkedQuery} />
+              <Checkbox
+                checked={this.state.forked}
+                onChange={e => {
+                  this.setState({
+                    forked: e.target.checked
+                  });
+                }}
+              />
             </Col>
           </Row>
 
@@ -87,16 +131,6 @@ class SearchForm extends Component {
           </Row>
         </FormSc>
         {this.props.loader ? <Loader /> : null}
-
-        {results !== null && results.length > 0 ? (
-          <SearchResults results={results} />
-        ) : (
-          <NoResults
-            data={results}
-            copy="Please enter your query and click the SEARCH button above - results will appear here."
-            no_results="No results. Please modify your search."
-          />
-        )}
       </Fragment>
     );
   }
