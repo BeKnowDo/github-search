@@ -1,34 +1,69 @@
-import React, { PureComponent } from "react";
+import React, { Component, Fragment } from "react";
 import {
   PaginationSC,
+  RowCenteredSc,
   PaginationItemSc,
   PaginationMoreSc,
   ChevronRightSc,
   ChevronLeftSc
 } from "./styles";
-import { Row, Col } from "react-styled-flexboxgrid";
+import { Col } from "react-styled-flexboxgrid";
 
-class Pagination extends PureComponent {
+class Pagination extends Component {
+  constructor(props) {
+    super(props);
+
+    const defaultState = {
+      startingPage: this.props.resultPage || 1,
+      lastPage: this.props.total
+    };
+
+    this.state = {
+      ...defaultState
+    };
+  }
   buildPagination() {
-    const total = Math.round(this.props.total / 10);
-    const page = this.props.page;
+    const total = this.props.total;
+    const resultPage = this.props.resultPage;
+    const startingPage = this.state.startingPage;
+    const lastPage = resultPage + 5 <= total ? startingPage + 4 : total;
+    const range = { startingPage, resultPage, lastPage };
 
     let pages = [];
     let i;
-    for (i = 1; i < total; i++) {
-      if (i <= 5) {
+
+    console.log(range);
+
+    if (startingPage >= 2) {
+      pages.push(
+        <Fragment key="previous-results-fragment">
+          <Col key={1}>
+            <PaginationItemSc active={resultPage === 1 ? "on" : undefined}>
+              {1}
+            </PaginationItemSc>
+          </Col>
+          <Col key="PaginationMoreIndicatorLeft">
+            <PaginationMoreSc>...</PaginationMoreSc>
+          </Col>
+        </Fragment>
+      );
+    }
+
+    for (i = startingPage; i <= lastPage - 1; i++) {
+      if (i <= lastPage) {
         pages.push(
           <Col key={i}>
-            <PaginationItemSc active={page === i ? "on" : undefined}>
+            <PaginationItemSc active={resultPage === i ? "on" : ""}>
               {i}
             </PaginationItemSc>
           </Col>
         );
       }
     }
-    if (total >= 5) {
+
+    if (total >= lastPage) {
       pages.push(
-        <Col key="PaginationMoreSc">
+        <Col key="PaginationMoreIndicatorRight">
           <PaginationMoreSc>...</PaginationMoreSc>
         </Col>
       );
@@ -40,19 +75,44 @@ class Pagination extends PureComponent {
     }
     return pages;
   }
+
   render() {
+    const startingPage = this.props.resultPage;
+    const lastPage = this.state.lastPage;
+    const resultPage = this.props.resultPage;
+
     return (
       <PaginationSC>
-        <Row>
+        <RowCenteredSc>
           <Col xs={1}>
-            <ChevronLeftSc onClick={this.props.previousPageResults} />
+            <ChevronLeftSc
+              onClick={e => {
+                if (this.state.startingPage >= 2) {
+                  this.setState({
+                    startingPage: startingPage - 1
+                  });
+                  // update store
+                  this.props.pageResults({ resultPage: startingPage - 1 });
+                }
+              }}
+            />
           </Col>
+
           {this.buildPagination()}
 
           <Col xs={1}>
-            <ChevronRightSc onClick={this.props.nextPageResults} />
+            <ChevronRightSc
+              onClick={e => {
+                if (resultPage < lastPage) {
+                  this.setState({
+                    startingPage: startingPage + 1
+                  });
+                  this.props.pageResults({ resultPage: startingPage + 1 });
+                }
+              }}
+            />
           </Col>
-        </Row>
+        </RowCenteredSc>
       </PaginationSC>
     );
   }

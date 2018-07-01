@@ -1,7 +1,5 @@
-import React, { Component, Fragment } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { Row, Col } from "react-styled-flexboxgrid";
-import Pagination from "../pagination";
 import NoResults from "../no-results";
 
 import {
@@ -32,11 +30,6 @@ class SearchResults extends Component {
       fork_count: item.forks_count || 0
     };
 
-    const repoOwner = {
-      name: item.owner.login,
-      avatar: item.owner.avatar_url
-    };
-
     return (
       <ResultItemSc key={repoInfo.id}>
         <Row>
@@ -49,7 +42,7 @@ class SearchResults extends Component {
               >
                 {repoInfo.full_name}
               </a>
-              {repoInfo.forked ? this.ForkedFlag() : undefined}
+              {repoInfo.forked ? this.ForkedFlag() : ""}
             </PargraphSc>
             <PargraphSc>{repoInfo.description}</PargraphSc>
           </Col>
@@ -81,43 +74,17 @@ class SearchResults extends Component {
   };
 
   buildList() {
-    const results = this.props.items;
+    const results = this.props.results.items || this.props.results;
     return results.map(result => {
       return this.resultItem(result);
     });
   }
 
   render() {
-    const page = this.props.result_page || 1;
-    const total = this.props.total_count;
-    const results = this.props.items;
+    const results = this.props.results.items;
 
     if (results) {
-      return (
-        <Fragment>
-          {results.length > 0 ? (
-            <Pagination
-              page={page}
-              previousPageResults={e => {
-                const targetPage = page - 1;
-                if (targetPage >= 0) {
-                  this.props.previousPageResults(e, targetPage, "");
-                }
-              }}
-              nextPageResults={e => {
-                const targetPage = page + 1;
-                if (page + 1 <= total) {
-                  this.props.nextPageResults(e, targetPage, "");
-                }
-              }}
-              total={total}
-            />
-          ) : (
-            undefined
-          )}
-          <ResultContainerSc>{this.buildList()}</ResultContainerSc>
-        </Fragment>
-      );
+      return <ResultContainerSc>{this.buildList()}</ResultContainerSc>;
     } else {
       return (
         <NoResults
@@ -129,9 +96,5 @@ class SearchResults extends Component {
     }
   }
 }
-
-SearchResults.propTypes = {
-  results: PropTypes.array
-};
 
 export default SearchResults;

@@ -6,7 +6,7 @@ const defaultState = {
   forked: false,
   license: "",
   stars: "",
-  result_page: 1
+  resultPage: 1
 };
 
 const url = (state = defaultState, action) => {
@@ -41,7 +41,7 @@ const url = (state = defaultState, action) => {
     case actionTypes.PAGE:
       return {
         ...state,
-        result_page: action.result_page
+        resultPage: action.resultPage
       };
 
     case actionTypes.LOADER:

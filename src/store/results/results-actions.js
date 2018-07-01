@@ -6,7 +6,7 @@ import {
   license,
   forked,
   keywords,
-  result_page
+  resultPage
 } from "../../store/query/query-actions";
 import { endpoints } from "../../endpoints";
 
@@ -14,7 +14,11 @@ export function getResults(searchParameters, dispatch) {
   searchParameters = searchParameters || {};
 
   const perPage = "&per_page=10";
-  const fetchURL = endpoints.search + searchParameters.url + perPage;
+  let fetchURL = endpoints.search + searchParameters.url + perPage;
+
+  if (searchParameters.resultPage) {
+    fetchURL = fetchURL + `&page=${searchParameters.resultPage}`;
+  }
 
   // show loading indicator
   dispatch({
@@ -22,28 +26,36 @@ export function getResults(searchParameters, dispatch) {
     loader: true
   });
 
-  fetch(fetchURL)
-    .then(response => response.json())
-    .then(data => {
-      dispatch({
-        type: actionTypes.RESULTS,
-        results: data
-      });
+  if (searchParameters.resultPage) {
+    resultPage({ resultPage: searchParameters.resultPage }, dispatch);
+  }
 
-      dispatch({
-        type: actionTypes.LOADER,
-        loader: false
-      });
+  // fetch(fetchURL)
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     dispatch({
+  //       type: actionTypes.RESULTS,
+  //       results: data
+  //     });
 
-      keywords({ keywords: searchParameters.keywords }, dispatch);
-      stars({ stars: searchParameters.stars }, dispatch);
-      license({ license: searchParameters.license }, dispatch);
-      forked({ forked: searchParameters.forked }, dispatch);
-      url({ url: searchParameters.url }, dispatch);
-    })
-    .catch(error => {
-      console.log(error);
-    });
+  //     dispatch({
+  //       type: actionTypes.LOADER,
+  //       loader: false
+  //     });
+
+  //     if (searchParameters.resultPage) {
+  //       resultPage({ resultPage: searchParameters.resultPage }, dispatch);
+  //     }
+
+  //     keywords({ keywords: searchParameters.keywords }, dispatch);
+  //     stars({ stars: searchParameters.stars }, dispatch);
+  //     license({ license: searchParameters.license }, dispatch);
+  //     forked({ forked: searchParameters.forked }, dispatch);
+  //     url({ url: searchParameters.url }, dispatch);
+  //   })
+  //   .catch(error => {
+  //     console.log(error);
+  //   });
 }
 
 export default { getResults };

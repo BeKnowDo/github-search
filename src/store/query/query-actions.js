@@ -35,9 +35,9 @@ export function forked({ forked = "" } = {}, dispatch) {
   });
 }
 
-export function result_page({ result_page = 1 } = {}, dispatch) {
+export function resultPage({ resultPage = 1 } = {}, dispatch) {
   dispatch({
     type: actionTypes.PAGE,
-    result_page
+    resultPage
   });
 }

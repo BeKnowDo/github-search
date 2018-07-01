@@ -24,8 +24,7 @@ export const PaginationSC = styled.div`
   margin: 0 auto;
   padding: 20px 0;
   max-width: 400px;
-  align-content: center;
-  justify-content: center;
+  user-select: none;
 `;
 
 export const PaginationItemSc = styled.li`
