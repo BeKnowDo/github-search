@@ -20,6 +20,8 @@ export function getResults(searchParameters, dispatch) {
     fetchURL = fetchURL + `&page=${searchParameters.resultPage}`;
   }
 
+  // console.log(fetchURL);
+
   // show loading indicator
   dispatch({
     type: actionTypes.LOADER,
@@ -30,32 +32,45 @@ export function getResults(searchParameters, dispatch) {
     resultPage({ resultPage: searchParameters.resultPage }, dispatch);
   }
 
-  // fetch(fetchURL)
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     dispatch({
-  //       type: actionTypes.RESULTS,
-  //       results: data
-  //     });
+  if (searchParameters.keywords) {
+    keywords({ keywords: searchParameters.keywords }, dispatch);
+  }
 
-  //     dispatch({
-  //       type: actionTypes.LOADER,
-  //       loader: false
-  //     });
+  if (searchParameters.stars) {
+    stars({ stars: searchParameters.stars }, dispatch);
+  }
 
-  //     if (searchParameters.resultPage) {
-  //       resultPage({ resultPage: searchParameters.resultPage }, dispatch);
-  //     }
+  if (searchParameters.license) {
+    license({ license: searchParameters.license }, dispatch);
+  }
 
-  //     keywords({ keywords: searchParameters.keywords }, dispatch);
-  //     stars({ stars: searchParameters.stars }, dispatch);
-  //     license({ license: searchParameters.license }, dispatch);
-  //     forked({ forked: searchParameters.forked }, dispatch);
-  //     url({ url: searchParameters.url }, dispatch);
-  //   })
-  //   .catch(error => {
-  //     console.log(error);
-  //   });
+  if (searchParameters.forked) {
+    forked({ forked: searchParameters.forked }, dispatch);
+  }
+  if (searchParameters.url) {
+    url({ url: searchParameters.url }, dispatch);
+  }
+
+  const fetchQuery = () => {
+    fetch(fetchURL)
+      .then(response => response.json())
+      .then(data => {
+        dispatch({
+          type: actionTypes.RESULTS,
+          results: data
+        });
+
+        dispatch({
+          type: actionTypes.LOADER,
+          loader: false
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  fetchQuery();
 }
 
 export default { getResults };

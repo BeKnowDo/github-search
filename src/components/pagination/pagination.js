@@ -10,35 +10,70 @@ import {
 import { Col } from "react-styled-flexboxgrid";
 
 class Pagination extends Component {
-  constructor(props) {
-    super(props);
-
-    const defaultState = {
-      startingPage: this.props.resultPage || 1,
-      lastPage: this.props.total
-    };
-
-    this.state = {
-      ...defaultState
-    };
-  }
   buildPagination() {
     const total = this.props.total;
-    const resultPage = this.props.resultPage;
-    const startingPage = this.state.startingPage;
-    const lastPage = resultPage + 5 <= total ? startingPage + 4 : total;
-    const range = { startingPage, resultPage, lastPage };
+    const searchParameters = this.props.searchParameters;
+    const resultPage = searchParameters.resultPage;
+
+    let startingPage = resultPage > 2 ? resultPage - 1 : resultPage;
+    const lastPage = resultPage + 3 <= total ? startingPage + 3 : total;
+
+    const dispatchAction = index => {
+      this.props.pageResults({
+        keywords: searchParameters.keywords,
+        stars: searchParameters.stars,
+        license: searchParameters.license,
+        forked: searchParameters.forked,
+        url: searchParameters.url,
+        resultPage: index
+      });
+    };
+
+    if (resultPage >= lastPage) {
+      startingPage = resultPage - 2;
+    }
 
     let pages = [];
-    let i;
 
-    console.log(range);
+    pages.push(
+      <Fragment key="previous-results-action">
+        <Col xs={1}>
+          <ChevronLeftSc
+            onClick={e => {
+              if (resultPage >= 2) {
+                this.props.pageResults({
+                  keywords: searchParameters.keywords,
+                  stars: searchParameters.stars,
+                  license: searchParameters.license,
+                  forked: searchParameters.forked,
+                  url: searchParameters.url,
+                  resultPage: resultPage - 1
+                });
+              }
+            }}
+          />
+        </Col>
+      </Fragment>
+    );
 
+    // Always show first page item and seperator
     if (startingPage >= 2) {
       pages.push(
         <Fragment key="previous-results-fragment">
           <Col key={1}>
-            <PaginationItemSc active={resultPage === 1 ? "on" : undefined}>
+            <PaginationItemSc
+              active={resultPage === 1 ? "on" : undefined}
+              onClick={e => {
+                this.props.pageResults({
+                  keywords: searchParameters.keywords,
+                  stars: searchParameters.stars,
+                  license: searchParameters.license,
+                  forked: searchParameters.forked,
+                  url: searchParameters.url,
+                  resultPage: 1
+                });
+              }}
+            >
               {1}
             </PaginationItemSc>
           </Col>
@@ -49,10 +84,19 @@ class Pagination extends Component {
       );
     }
 
-    for (i = startingPage; i <= lastPage - 1; i++) {
+    // build page items
+    let i;
+    for (i = startingPage; i <= lastPage; i++) {
+      const scope = i;
       if (i <= lastPage) {
         pages.push(
-          <Col key={i}>
+          <Col
+            key={i}
+            onClick={e => {
+              e.preventDefault();
+              dispatchAction(scope);
+            }}
+          >
             <PaginationItemSc active={resultPage === i ? "on" : ""}>
               {i}
             </PaginationItemSc>
@@ -61,7 +105,8 @@ class Pagination extends Component {
       }
     }
 
-    if (total >= lastPage) {
+    // Always show last page item and seperator
+    if (total > lastPage) {
       pages.push(
         <Col key="PaginationMoreIndicatorRight">
           <PaginationMoreSc>...</PaginationMoreSc>
@@ -69,51 +114,56 @@ class Pagination extends Component {
       );
       pages.push(
         <Col key={total}>
-          <PaginationItemSc>{total}</PaginationItemSc>
+          <PaginationItemSc
+            onClick={e => {
+              this.props.pageResults({
+                keywords: searchParameters.keywords,
+                stars: searchParameters.stars,
+                license: searchParameters.license,
+                forked: searchParameters.forked,
+                url: searchParameters.url,
+                resultPage: total
+              });
+            }}
+          >
+            {total}
+          </PaginationItemSc>
         </Col>
       );
     }
+
+    pages.push(
+      <Fragment key="next-results-action">
+        <Col xs={1}>
+          <ChevronRightSc
+            onClick={e => {
+              if (resultPage < lastPage) {
+                this.props.pageResults({
+                  keywords: searchParameters.keywords,
+                  stars: searchParameters.stars,
+                  license: searchParameters.license,
+                  forked: searchParameters.forked,
+                  url: searchParameters.url,
+                  resultPage: resultPage + 1
+                });
+              }
+            }}
+          />
+        </Col>
+      </Fragment>
+    );
     return pages;
   }
-
   render() {
-    const startingPage = this.props.resultPage;
-    const lastPage = this.state.lastPage;
-    const resultPage = this.props.resultPage;
+    const searchParameters = this.props.searchParameters;
 
-    return (
+    return this.props.total !== undefined &&
+      searchParameters.resultPage !== undefined ? (
       <PaginationSC>
-        <RowCenteredSc>
-          <Col xs={1}>
-            <ChevronLeftSc
-              onClick={e => {
-                if (this.state.startingPage >= 2) {
-                  this.setState({
-                    startingPage: startingPage - 1
-                  });
-                  // update store
-                  this.props.pageResults({ resultPage: startingPage - 1 });
-                }
-              }}
-            />
-          </Col>
-
-          {this.buildPagination()}
-
-          <Col xs={1}>
-            <ChevronRightSc
-              onClick={e => {
-                if (resultPage < lastPage) {
-                  this.setState({
-                    startingPage: startingPage + 1
-                  });
-                  this.props.pageResults({ resultPage: startingPage + 1 });
-                }
-              }}
-            />
-          </Col>
-        </RowCenteredSc>
+        <RowCenteredSc>{this.buildPagination()}</RowCenteredSc>
       </PaginationSC>
+    ) : (
+      undefined
     );
   }
 }

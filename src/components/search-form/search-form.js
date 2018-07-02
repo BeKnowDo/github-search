@@ -62,10 +62,12 @@ class SearchForm extends Component {
         <FormSc
           onSubmit={e => {
             e.preventDefault();
-
             // check if the user provided input
             if (url.length > 0) {
-              this.props.handleSubmit(e, searchParameters);
+              this.props.handleSubmit(e, {
+                ...searchParameters,
+                resultPage: 1
+              });
             }
           }}
           compact="true"

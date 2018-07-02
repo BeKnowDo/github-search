@@ -5,12 +5,12 @@ import { getResults } from "../../store/results/results-actions";
 import SearchForm from "../../components/search-form";
 import SearchResults from "../../components/search-results";
 import Pagination from "../../components/pagination";
+// import search from "react-feather/dist/icons/search";
 
 class Home extends Component {
   render() {
-    const resultPage = this.props.resultPage || 1;
     const total = Math.round(this.props.results.total_count / 10);
-    const results = this.props.results.items;
+    const results = this.props.results.items ? this.props.results.items : [];
 
     let searchParameters = {
       keywords: this.props.keywords,
@@ -26,8 +26,8 @@ class Home extends Component {
         <SearchForm {...this.props} />
         {results.length > 0 ? (
           <Pagination
-            resultPage={resultPage}
             pageResults={this.props.pageResults}
+            searchParameters={searchParameters}
             total={total}
           />
         ) : (
@@ -36,8 +36,8 @@ class Home extends Component {
         <SearchResults {...this.props} />
         {results.length > 0 ? (
           <Pagination
-            resultPage={resultPage}
             pageResults={this.props.pageResults}
+            searchParameters={searchParameters}
             total={total}
           />
         ) : (
@@ -66,7 +66,8 @@ function mapDispatchToProps(dispatch) {
       getResults(searchParameters, dispatch);
     },
 
-    handleSubmit: searchParameters => {
+    handleSubmit: (e, searchParameters) => {
+      e.preventDefault();
       getResults(searchParameters, dispatch);
     }
   };
