@@ -49,7 +49,7 @@ class Pagination extends Component {
       </Fragment>
     );
 
-    // Always show first page item and seperator
+    // Always show first page item and separator
     if (startingPage >= 2) {
       pages.push(
         <Fragment key="previous-results-fragment">
@@ -98,7 +98,7 @@ class Pagination extends Component {
       }
     }
 
-    // Always show last page item and seperator
+    // Always show last page item and separator
     if (total > lastPage) {
       pages.push(
         <Col key="PaginationMoreIndicatorRight">
