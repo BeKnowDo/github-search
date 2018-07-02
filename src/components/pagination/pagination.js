@@ -41,14 +41,7 @@ class Pagination extends Component {
           <ChevronLeftSc
             onClick={e => {
               if (resultPage >= 2) {
-                this.props.pageResults({
-                  keywords: searchParameters.keywords,
-                  stars: searchParameters.stars,
-                  license: searchParameters.license,
-                  forked: searchParameters.forked,
-                  url: searchParameters.url,
-                  resultPage: resultPage - 1
-                });
+                dispatchAction(resultPage - 1);
               }
             }}
           />
@@ -116,14 +109,7 @@ class Pagination extends Component {
         <Col key={total}>
           <PaginationItemSc
             onClick={e => {
-              this.props.pageResults({
-                keywords: searchParameters.keywords,
-                stars: searchParameters.stars,
-                license: searchParameters.license,
-                forked: searchParameters.forked,
-                url: searchParameters.url,
-                resultPage: total
-              });
+              dispatchAction(total);
             }}
           >
             {total}
