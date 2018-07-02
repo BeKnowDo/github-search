@@ -63,12 +63,12 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     pageResults: searchParameters => {
-      getResults(searchParameters, dispatch);
+      getResults(searchParameters);
     },
 
     handleSubmit: (e, searchParameters) => {
       e.preventDefault();
-      getResults(searchParameters, dispatch);
+      getResults(searchParameters);
     }
   };
 }
