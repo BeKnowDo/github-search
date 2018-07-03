@@ -48,7 +48,7 @@ class Home extends Component {
   }
 }
 
-function mapStateToProps(state) {
+const mapStateToProps = state => {
   return {
     results: state.results.results,
     keywords: state.query.keywords,
@@ -58,20 +58,18 @@ function mapStateToProps(state) {
     stars: state.query.stars,
     url: state.query.url
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return {
     pageResults: searchParameters => {
-      getResults(searchParameters);
+      dispatch(getResults(searchParameters));
     },
 
-    handleSubmit: (e, searchParameters) => {
-      e.preventDefault();
-      getResults(searchParameters);
-    }
+    handleSubmit: (e, searchParameters) =>
+      dispatch(getResults(searchParameters))
   };
-}
+};
 
 export default connect(
   mapStateToProps,

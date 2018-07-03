@@ -15,6 +15,8 @@ class Pagination extends Component {
     const searchParameters = this.props.searchParameters;
     const resultPage = searchParameters.resultPage;
 
+    console.log({ searchParameters, resultPage });
+
     let startingPage = resultPage > 2 ? resultPage - 1 : resultPage;
     const lastPage = resultPage + 3 <= total ? startingPage + 3 : total;
 

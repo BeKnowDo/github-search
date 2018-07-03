@@ -10,67 +10,69 @@ import {
 } from "../../store/query/query-actions";
 import { endpoints } from "../../endpoints";
 
-export function getResults(searchParameters, dispatch) {
-  searchParameters = searchParameters || {};
+export function getResults(searchParameters) {
+  return dispatch => {
+    searchParameters = searchParameters || {};
 
-  const perPage = "&per_page=10";
-  let fetchURL = endpoints.search + searchParameters.url + perPage;
+    const perPage = "&per_page=10";
+    let fetchURL = endpoints.search + searchParameters.url + perPage;
 
-  if (searchParameters.resultPage) {
-    fetchURL = fetchURL + `&page=${searchParameters.resultPage}`;
-  }
+    if (searchParameters.resultPage) {
+      fetchURL = fetchURL + `&page=${searchParameters.resultPage}`;
+    }
 
-  // console.log(fetchURL);
+    // console.log(fetchURL);
 
-  // show loading indicator
-  dispatch({
-    type: actionTypes.LOADER,
-    loader: true
-  });
+    // show loading indicator
+    dispatch({
+      type: actionTypes.LOADER,
+      loader: true
+    });
 
-  if (searchParameters.resultPage) {
-    resultPage({ resultPage: searchParameters.resultPage }, dispatch);
-  }
+    if (searchParameters.resultPage) {
+      dispatch(resultPage(searchParameters.resultPage));
+    }
 
-  if (searchParameters.keywords) {
-    keywords({ keywords: searchParameters.keywords }, dispatch);
-  }
+    if (searchParameters.keywords) {
+      dispatch(keywords(searchParameters.keywords));
+    }
 
-  if (searchParameters.stars) {
-    stars({ stars: searchParameters.stars }, dispatch);
-  }
+    if (searchParameters.stars) {
+      dispatch(stars(searchParameters.stars));
+    }
 
-  if (searchParameters.license) {
-    license({ license: searchParameters.license }, dispatch);
-  }
+    if (searchParameters.license) {
+      dispatch(license(searchParameters.license));
+    }
 
-  if (searchParameters.forked) {
-    forked({ forked: searchParameters.forked }, dispatch);
-  }
-  if (searchParameters.url) {
-    url({ url: searchParameters.url }, dispatch);
-  }
+    if (searchParameters.forked) {
+      dispatch(forked(searchParameters.forked));
+    }
+    if (searchParameters.url) {
+      dispatch(url(searchParameters.url));
+    }
 
-  const fetchQuery = () => {
-    fetch(fetchURL)
-      .then(response => response.json())
-      .then(data => {
-        dispatch({
-          type: actionTypes.RESULTS,
-          results: data
+    const fetchQuery = () => {
+      fetch(fetchURL)
+        .then(response => response.json())
+        .then(data => {
+          dispatch({
+            type: actionTypes.RESULTS,
+            results: data
+          });
+
+          dispatch({
+            type: actionTypes.LOADER,
+            loader: false
+          });
+        })
+        .catch(error => {
+          console.log(error);
         });
+    };
 
-        dispatch({
-          type: actionTypes.LOADER,
-          loader: false
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    fetchQuery();
   };
-
-  fetchQuery();
 }
 
 export default { getResults };
