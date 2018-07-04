@@ -24,7 +24,7 @@ class Home extends Component {
     return (
       <Fragment>
         <SearchForm {...this.props} />
-        {results.length > 0 ? (
+        {total > 1 ? (
           <Pagination
             pageResults={this.props.pageResults}
             searchParameters={searchParameters}
@@ -34,7 +34,7 @@ class Home extends Component {
           undefined
         )}
         <SearchResults {...this.props} />
-        {results.length > 0 ? (
+        {total > 1 ? (
           <Pagination
             pageResults={this.props.pageResults}
             searchParameters={searchParameters}

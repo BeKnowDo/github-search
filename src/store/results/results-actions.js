@@ -48,6 +48,7 @@ export function getResults(searchParameters) {
     if (searchParameters.forked) {
       dispatch(forked(searchParameters.forked));
     }
+
     if (searchParameters.url) {
       dispatch(url(searchParameters.url));
     }
