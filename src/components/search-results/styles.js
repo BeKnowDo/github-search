@@ -4,7 +4,7 @@ import { colors, borders } from "../../styled-component-variables";
 // TODO: breaks these up
 
 export const ResultContainerSc = styled.div`
-  padding: 10px 0;
+  padding: 5px 0;
 `;
 
 export const OwnerAvatar = styled.div`
@@ -23,9 +23,17 @@ export const OwnerAvatar = styled.div`
 
 export const ResultItemSc = styled.li`
   border: ${borders.grey};
+  border-bottom: 0;
   list-style-type: none;
-  padding: 0 10px;
-  margin: 0 0 10px;
+  padding: 20px 10px;
+
+  background-color: ${props =>
+    props.backgroundClass === "odd" ? colors.whiteSilver : "none"};
+
+  &:last-child {
+    border: ${borders.grey};
+  }
+
   > div {
     > div {
       text-align: center;

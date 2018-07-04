@@ -3,8 +3,10 @@ const colors = {
   blue2: "#337fbe",
   black: "#000",
   white: "#fff",
+  whiteSilver: "#F7F5F5",
   red: "#F8170C",
-  grey: "#49496A"
+  grey: "#49496A",
+  gold: "#FBC652"
 };
 
 const shadows = {

@@ -9,6 +9,7 @@ import Dropdown from "../dropdown";
 import Checkbox from "../checkbox";
 import Loader from "../loader";
 import Label from "../label";
+import search from "react-feather/dist/icons/search";
 
 class SearchForm extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class SearchForm extends Component {
     this.state = this.defaultState;
   }
 
-  render() {
+  searchParameters() {
     const keywords = this.state.keywords || "";
     const stars = this.state.stars || "";
     const license = this.state.license || "";
@@ -56,6 +57,13 @@ class SearchForm extends Component {
       forked,
       url
     };
+
+    return searchParameters;
+  }
+
+  render() {
+    const searchParameters = this.searchParameters();
+    const { keywords, url, stars, license, forked } = searchParameters;
 
     return (
       <Fragment>
@@ -116,7 +124,7 @@ class SearchForm extends Component {
 
             <Col xs={12} sm={6} md={6} lg={6}>
               <Checkbox
-                checked={this.state.forked}
+                checked={forked}
                 onChange={e => {
                   this.setState({
                     forked: e.target.checked

@@ -2,6 +2,10 @@ import styled from "styled-components";
 import { colors } from "../../styled-component-variables";
 
 const ButtonSc = styled.button`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
   box-shadow: 0 2px 16px 0 rgba(3, 3, 3, 0.2);
   border-radius: 4px;
   border: 0;
@@ -20,6 +24,9 @@ const ButtonSc = styled.button`
     transition: background-color 200ms ease-in-out;
     background-color: ${colors.white};
     color: ${colors.blue};
+  }
+
+  svg {
   }
 `;
 

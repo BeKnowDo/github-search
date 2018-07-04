@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import { Row, Col } from "react-styled-flexboxgrid";
 import NoResults from "../no-results";
+import Star from "react-feather/dist/icons/star";
+import { colors } from "../../styled-component-variables/index";
 
 import {
   ResultContainerSc,
   ResultItemSc,
   ForkedFlagSc,
-  PargraphSc
-  // OwnerAvatar
+  PargraphSc,
+  OwnerAvatar
 } from "./styles";
 
 class SearchResults extends Component {
@@ -15,7 +17,7 @@ class SearchResults extends Component {
     return <ForkedFlagSc>forked</ForkedFlagSc>;
   };
 
-  resultItem = item => {
+  resultItem(item, index) {
     const repoInfo = {
       id: item.id,
       name: item.name,
@@ -30,8 +32,17 @@ class SearchResults extends Component {
       fork_count: item.forks_count || 0
     };
 
+    const backgroundClass = index % 2 === 0 ? "" : "odd";
+
+    const owner = item.owner;
+    const ownerInfo = {
+      name: owner.login,
+      avatar: owner.avatar_url,
+      type: owner.type
+    };
+
     return (
-      <ResultItemSc key={repoInfo.id}>
+      <ResultItemSc key={repoInfo.id} backgroundClass={backgroundClass}>
         <Row>
           <Col xs={12} sm={6}>
             <PargraphSc>
@@ -50,7 +61,14 @@ class SearchResults extends Component {
           <Col xs={12} sm={3} md={3} lg={3}>
             <Row>
               <Col xs={2} sm={12} md={12} lg={12}>
-                <PargraphSc>Stars:</PargraphSc>
+                <PargraphSc>
+                  <Star
+                    size={18}
+                    color={colors.grey}
+                    fill={colors.gold}
+                    strokeWidth="1"
+                  />
+                </PargraphSc>
               </Col>
               <Col xs={9} sm={12} md={12} lg={12}>
                 <PargraphSc>{repoInfo.stars}</PargraphSc>
@@ -71,12 +89,12 @@ class SearchResults extends Component {
         </Row>
       </ResultItemSc>
     );
-  };
+  }
 
   buildList() {
     const results = this.props.results.items || this.props.results;
-    return results.map(result => {
-      return this.resultItem(result);
+    return results.map((result, index) => {
+      return this.resultItem(result, index);
     });
   }
 
