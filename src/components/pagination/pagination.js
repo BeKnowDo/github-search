@@ -13,26 +13,26 @@ class Pagination extends Component {
   buildPagination() {
     const total = this.props.total;
     const searchParameters = this.props.searchParameters;
-    const resultPage = searchParameters.resultPage;
+    const page = searchParameters.page;
 
-    // console.log({ ...searchParameters, resultPage });
+    // console.log({ ...searchParameters, page });
 
-    let startingPage = resultPage > 2 ? resultPage - 1 : resultPage;
-    const lastPage = resultPage + 3 <= total ? startingPage + 3 : total;
+    let startingPage = page > 2 ? page - 1 : page;
+    const lastPage = page + 3 <= total ? startingPage + 3 : total;
 
     const dispatchAction = index => {
       this.props.pageResults({
-        keywords: searchParameters.keywords,
+        q: searchParameters.q,
         stars: searchParameters.stars,
         license: searchParameters.license,
-        forked: searchParameters.forked,
-        url: searchParameters.url,
-        resultPage: index
+        fork: searchParameters.fork,
+        page: index,
+        per_page: "10"
       });
     };
 
-    if (resultPage >= lastPage) {
-      startingPage = resultPage - 2 > 0 ? resultPage - 2 : 1;
+    if (page >= lastPage) {
+      startingPage = page - 2 > 0 ? page - 2 : 1;
     }
 
     let pages = [];
@@ -42,8 +42,8 @@ class Pagination extends Component {
         <Col xs={1}>
           <ChevronLeftSc
             onClick={e => {
-              if (resultPage >= 2) {
-                dispatchAction(resultPage - 1);
+              if (page >= 2) {
+                dispatchAction(page - 1);
               }
             }}
           />
@@ -57,15 +57,15 @@ class Pagination extends Component {
         <Fragment key="previous-results-fragment">
           <Col key={1}>
             <PaginationItemSc
-              active={resultPage === 1 ? "on" : undefined}
+              active={page === 1 ? "on" : undefined}
               onClick={e => {
                 this.props.pageResults({
-                  keywords: searchParameters.keywords,
+                  q: searchParameters.q,
                   stars: searchParameters.stars,
                   license: searchParameters.license,
-                  forked: searchParameters.forked,
-                  url: searchParameters.url,
-                  resultPage: 1
+                  fork: searchParameters.fork,
+                  page: 1,
+                  per_page: "10"
                 });
               }}
             >
@@ -92,7 +92,7 @@ class Pagination extends Component {
               dispatchAction(scope);
             }}
           >
-            <PaginationItemSc active={resultPage === i ? "on" : ""}>
+            <PaginationItemSc active={page === i ? "on" : ""}>
               {i}
             </PaginationItemSc>
           </Col>
@@ -125,14 +125,14 @@ class Pagination extends Component {
         <Col xs={1}>
           <ChevronRightSc
             onClick={e => {
-              if (resultPage < lastPage) {
+              if (page < lastPage) {
                 this.props.pageResults({
-                  keywords: searchParameters.keywords,
+                  q: searchParameters.q,
                   stars: searchParameters.stars,
                   license: searchParameters.license,
-                  forked: searchParameters.forked,
-                  url: searchParameters.url,
-                  resultPage: resultPage + 1
+                  fork: searchParameters.fork,
+                  page: page + 1,
+                  per_page: "10"
                 });
               }
             }}
@@ -146,7 +146,7 @@ class Pagination extends Component {
     const searchParameters = this.props.searchParameters;
 
     return this.props.total !== undefined &&
-      searchParameters.resultPage !== undefined ? (
+      searchParameters.page !== undefined ? (
       <PaginationSC>
         <RowCenteredSc>{this.buildPagination()}</RowCenteredSc>
       </PaginationSC>

@@ -5,7 +5,6 @@ import { getResults } from "../../store/results/results-actions";
 import SearchForm from "../../components/search-form";
 import SearchResults from "../../components/search-results";
 import Pagination from "../../components/pagination";
-// import search from "react-feather/dist/icons/search";
 
 class Home extends Component {
   render() {
@@ -13,12 +12,12 @@ class Home extends Component {
     const results = this.props.results.items ? this.props.results.items : [];
 
     let searchParameters = {
-      keywords: this.props.keywords,
-      forked: this.props.forked,
+      q: this.props.q,
+      fork: this.props.fork,
       license: this.props.license,
-      resultPage: this.props.resultPage,
+      page: this.props.page,
       stars: this.props.stars,
-      url: this.props.url
+      perPage: "&per_page=10"
     };
 
     return (
@@ -51,12 +50,11 @@ class Home extends Component {
 const mapStateToProps = state => {
   return {
     results: state.results.results,
-    keywords: state.query.keywords,
-    forked: state.query.forked,
+    q: state.query.q,
+    fork: state.query.fork,
     license: state.query.license,
-    resultPage: state.query.resultPage,
-    stars: state.query.stars,
-    url: state.query.url
+    page: state.query.page,
+    stars: state.query.stars
   };
 };
 

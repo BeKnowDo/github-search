@@ -2,19 +2,20 @@ import { actionTypes } from "../action-types";
 
 const defaultState = {
   url: "",
-  keywords: "",
-  forked: false,
+  q: "",
+  fork: false,
   license: "",
   stars: "",
-  resultPage: 1
+  page: 1,
+  per_page: "10"
 };
 
 const url = (state = defaultState, action) => {
   switch (action.type) {
-    case actionTypes.KEYWORDS:
+    case actionTypes.Q:
       return {
         ...state,
-        keywords: action.keywords
+        q: action.q
       };
 
     case actionTypes.URL:
@@ -23,10 +24,10 @@ const url = (state = defaultState, action) => {
         url: action.url
       };
 
-    case actionTypes.FORKED:
+    case actionTypes.FORK:
       return {
         ...state,
-        forked: action.forked
+        fork: action.fork
       };
     case actionTypes.LICENSE:
       return {
@@ -41,7 +42,7 @@ const url = (state = defaultState, action) => {
     case actionTypes.PAGE:
       return {
         ...state,
-        resultPage: action.resultPage
+        page: action.page
       };
 
     case actionTypes.LOADER:

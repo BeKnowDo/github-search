@@ -1,13 +1,15 @@
 import { actionTypes } from "../action-types";
 
+// q = is query
+
 const urlAction = url => ({
   type: actionTypes.URL,
   url
 });
 
-const keywordsAction = keywords => ({
-  type: actionTypes.KEYWORDS,
-  keywords
+const qAction = q => ({
+  type: actionTypes.Q,
+  q
 });
 
 const starsAction = stars => ({
@@ -20,14 +22,14 @@ const licenseAction = license => ({
   license
 });
 
-const forkedAction = forked => ({
-  type: actionTypes.FORKED,
-  forked
+const forkAction = fork => ({
+  type: actionTypes.FORK,
+  fork
 });
 
-const resultPageAction = resultPage => ({
+const pageAction = page => ({
   type: actionTypes.PAGE,
-  resultPage
+  page
 });
 
 export function url(url) {
@@ -36,9 +38,9 @@ export function url(url) {
   };
 }
 
-export function keywords(keywords) {
+export function q(q) {
   return dispatch => {
-    dispatch(keywordsAction(keywords));
+    dispatch(qAction(q));
   };
 }
 
@@ -53,14 +55,14 @@ export function license(license) {
   };
 }
 
-export function forked(forked) {
+export function fork(fork) {
   return dispatch => {
-    dispatch(forkedAction(forked));
+    dispatch(forkAction(fork));
   };
 }
 
-export function resultPage(resultPage) {
+export function page(page) {
   return dispatch => {
-    dispatch(resultPageAction(resultPage));
+    dispatch(pageAction(page));
   };
 }

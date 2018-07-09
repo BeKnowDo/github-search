@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Row, Col } from "react-styled-flexboxgrid";
 import NoResults from "../no-results";
 import Star from "react-feather/dist/icons/star";
+import UserImage from "../user";
+
 import { colors } from "../../styled-component-variables/index";
 
 import {
@@ -34,16 +36,19 @@ class SearchResults extends Component {
 
     const backgroundClass = index % 2 === 0 ? "" : "odd";
 
-    const owner = item.owner;
     const ownerInfo = {
-      name: owner.login,
-      avatar: owner.avatar_url,
-      type: owner.type
+      name: item.owner.login,
+      avatar: item.owner.avatar_url,
+      type: item.owner.type
     };
 
     return (
       <ResultItemSc key={repoInfo.id} backgroundClass={backgroundClass}>
         <Row>
+          <Col xs={12} sm={2}>
+            <UserImage avatar={ownerInfo.avatar} />
+          </Col>
+
           <Col xs={12} sm={6}>
             <PargraphSc>
               <a
@@ -58,7 +63,7 @@ class SearchResults extends Component {
             <PargraphSc>{repoInfo.description}</PargraphSc>
           </Col>
 
-          <Col xs={12} sm={3} md={3} lg={3}>
+          <Col xs={12} sm={2} md={2} lg={2}>
             <Row>
               <Col xs={2} sm={12} md={12} lg={12}>
                 <PargraphSc>
@@ -76,7 +81,7 @@ class SearchResults extends Component {
             </Row>
           </Col>
 
-          <Col xs={12} sm={3} md={3} lg={3}>
+          <Col xs={12} sm={2} md={2} lg={2}>
             <Row center="xs">
               <Col xs={2} sm={12} md={12} lg={12}>
                 <PargraphSc>License:</PargraphSc>

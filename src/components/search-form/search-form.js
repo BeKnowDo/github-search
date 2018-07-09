@@ -17,45 +17,28 @@ class SearchForm extends Component {
     // let's leverage component state to avoid unnecessary rerendering
 
     this.defaultState = {
-      keywords: this.props.keywords || "",
-      url: "",
+      q: this.props.q || "",
       stars: this.props.stars || "",
       license: this.props.license || "",
-      forked: this.props.forked || false
+      fork: this.props.fork || false,
+      perPage: "&per_page=10"
     };
     this.state = this.defaultState;
   }
 
   searchParameters() {
-    const keywords = this.state.keywords || "";
+    const q = this.state.q || "";
     const stars = this.state.stars || "";
     const license = this.state.license || "";
-    const forked = this.state.forked;
-
-    let url = "";
-
-    if (keywords.length > 0) {
-      url = url + `${keywords}`;
-    }
-
-    if (stars.length > 0) {
-      url = url + ` stars:${stars}`;
-    }
-
-    if (license.length > 0) {
-      url = url + ` license:${license}`;
-    }
-
-    if (forked === true) {
-      url = url + ` fork:true`;
-    }
+    const fork = this.state.fork;
+    const per_page = 10;
 
     const searchParameters = {
-      keywords,
+      q,
       stars,
       license,
-      forked,
-      url
+      fork,
+      per_page
     };
 
     return searchParameters;
@@ -63,7 +46,7 @@ class SearchForm extends Component {
 
   render() {
     const searchParameters = this.searchParameters();
-    const { keywords, url, stars, license, forked } = searchParameters;
+    const { q, stars, license, fork } = searchParameters;
 
     return (
       <Fragment>
@@ -71,12 +54,10 @@ class SearchForm extends Component {
           onSubmit={e => {
             e.preventDefault();
             // check if the user provided input
-            if (url.length > 0) {
-              this.props.handleSubmit(e, {
-                ...searchParameters,
-                resultPage: 1
-              });
-            }
+            this.props.handleSubmit(e, {
+              ...searchParameters,
+              page: 1
+            });
           }}
           compact="true"
         >
@@ -86,10 +67,10 @@ class SearchForm extends Component {
               <Input
                 type="text"
                 placeholder="Search by keyword"
-                value={keywords || ""}
+                value={q || ""}
                 onChange={e => {
                   this.setState({
-                    keywords: e.target.value
+                    q: e.target.value
                   });
                 }}
               />
@@ -124,10 +105,10 @@ class SearchForm extends Component {
 
             <Col xs={12} sm={6} md={6} lg={6}>
               <Checkbox
-                checked={forked}
+                checked={fork}
                 onChange={e => {
                   this.setState({
-                    forked: e.target.checked
+                    fork: e.target.checked
                   });
                 }}
               />

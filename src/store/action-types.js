@@ -1,8 +1,8 @@
 export const actionTypes = {
   URL: "URL",
-  KEYWORDS: "KEYWORDS",
+  Q: "Q",
   STARS: "STARS",
-  FORKED: "FORKED",
+  FORK: "FORK",
   LICENSE: "LICENSE",
   PAGE: "PAGE",
   LOADER: "LOADER",

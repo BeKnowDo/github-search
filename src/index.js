@@ -27,6 +27,9 @@ injectGlobal`
     padding: 0;
     margin: 0;
   }
+  img {
+    max-width: 100%;
+  }
 `;
 
 const Root = ({ store }) => (
