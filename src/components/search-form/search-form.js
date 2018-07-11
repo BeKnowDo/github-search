@@ -9,7 +9,6 @@ import Dropdown from "../dropdown";
 import Checkbox from "../checkbox";
 import Loader from "../loader";
 import Label from "../label";
-import search from "react-feather/dist/icons/search";
 
 class SearchForm extends Component {
   constructor(props) {

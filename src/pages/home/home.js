@@ -9,7 +9,6 @@ import Pagination from "../../components/pagination";
 class Home extends Component {
   render() {
     const total = Math.round(this.props.results.total_count / 10);
-    const results = this.props.results.items ? this.props.results.items : [];
 
     let searchParameters = {
       q: this.props.q,

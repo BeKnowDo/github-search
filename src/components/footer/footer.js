@@ -12,7 +12,7 @@ class Footer extends Component {
           &copy; {this.getYear()}
           <a href="//bkd.io" title="BKD Home Page">
             {" "}
-            BKD, Inc. - CONFIDENTIAL
+            GitHub Search
           </a>
         </p>
       </FooterSC>

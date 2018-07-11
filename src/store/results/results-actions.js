@@ -10,8 +10,6 @@ export function getResults(searchParameters = {}) {
     if (searchParameters) {
       let fetchURL = `${endpoints.search}${urlGenerator(searchParameters)}`;
 
-      console.log(searchParameters);
-
       // show loading indicator
       dispatch({
         type: actionTypes.LOADER,

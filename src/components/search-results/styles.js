@@ -8,16 +8,13 @@ export const ResultContainerSc = styled.div`
 `;
 
 export const OwnerAvatar = styled.div`
-  padding: 20px 0 0;
+  padding: 10px 0 20px;
   a {
     border-radius: 50%;
     overflow: hidden;
     display: block;
     max-width: 120px;
-  }
-  img {
-    display: block;
-    max-width: 100%;
+    margin: 0 auto;
   }
 `;
 

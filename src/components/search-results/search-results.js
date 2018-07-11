@@ -46,7 +46,11 @@ class SearchResults extends Component {
       <ResultItemSc key={repoInfo.id} backgroundClass={backgroundClass}>
         <Row>
           <Col xs={12} sm={2}>
-            <UserImage avatar={ownerInfo.avatar} />
+            <OwnerAvatar>
+              <a href={ownerInfo.avatar} title="">
+                <UserImage avatar={ownerInfo.avatar} />
+              </a>
+            </OwnerAvatar>
           </Col>
 
           <Col xs={12} sm={6}>
@@ -104,7 +108,9 @@ class SearchResults extends Component {
   }
 
   render() {
-    const results = this.props.results.items;
+    const results = this.props.results.items.length
+      ? this.props.results.items
+      : null;
 
     if (results) {
       return <ResultContainerSc>{this.buildList()}</ResultContainerSc>;
